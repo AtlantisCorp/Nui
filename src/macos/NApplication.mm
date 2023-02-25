@@ -99,4 +99,9 @@ namespace Nui
     {
         [mHandle terminate:nil];
     }
+    
+    fs::path Application::resourcePath() const
+    {
+        return NSBundle.mainBundle.resourceURL.path.UTF8String;
+    }
 }

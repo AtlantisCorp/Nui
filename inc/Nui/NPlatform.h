@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <optional>
 #include <functional>
+#include <filesystem>
 
 #if defined(__APPLE__)
 #
@@ -55,6 +56,9 @@ namespace std
 {
     typedef std::map < std::string, std::any > dictionnary;
 }
+
+namespace fs = std::filesystem;
+using namespace std::string_literals;
 
 namespace Nui
 {

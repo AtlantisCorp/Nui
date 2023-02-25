@@ -39,7 +39,7 @@ if (APPLE AND NOT IOS)
 
     file(
         GLOB NuiAPPLEHeaders 
-        ${CMAKE_CURRENT_SOURCE_DIR}/inc/macos/*.h 
+        ${CMAKE_CURRENT_SOURCE_DIR}/inc/Nui/macos/*.h 
     )
     file(
         GLOB NuiAPPLESources 

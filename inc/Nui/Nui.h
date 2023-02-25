@@ -14,6 +14,7 @@
 
 #include "NApplication.h"
 #include "NButton.h"
+#include "NImage.h"
 #include "NLabel.h"
 #include "NPlatform.h"
 #include "NScrollView.h"

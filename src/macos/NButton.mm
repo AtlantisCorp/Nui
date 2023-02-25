@@ -10,15 +10,16 @@
  */
 
 #include "Nui/NButton.h"
+#include "Nui/macos/NSButtonWithImageSpacing.h"
 
 Nui::Button::Button(std::string_view title, const std::function < void(TextControl const&) >& handler):
-Nui::TextControl([NSButton buttonWithTitle:@(title.data())
-                                    target:nil
-                                    action:nil])
+Nui::TextControl([NSButtonWithImageSpacing buttonWithTitle:@(title.data())
+                                                    target:nil
+                                                    action:nil])
 {
     setActionHandler(handler);
     
-    NSButton* hdl = (NSButton*)handle();
+    NSButtonWithImageSpacing* hdl = (NSButtonWithImageSpacing*)handle();
     [hdl setButtonType:NSButtonTypeMomentaryPushIn];
     [hdl setBezelStyle:NSBezelStyleRoundRect];
     
@@ -102,4 +103,24 @@ void Nui::Button::setAlternateText(std::string_view text)
 {
     mAlternateText = (std::string) text;
     ((NSButton*)handle()).alternateTitle = @(text.data());
+}
+
+void Nui::Button::setImage(const Shared < Image >& image)
+{
+    mImage = image;
+    ((NSButton*)handle()).image = image->handle();
+}
+
+void Nui::Button::setHorizontalPadding(double value)
+{
+    mHorizontalPadding = value;
+    ((NSButtonWithImageSpacing*)handle()).horizontalPadding = value;
+    ((NSButton*)handle()).needsDisplay = YES;
+}
+
+void Nui::Button::setVerticalPadding(double value)
+{
+    mVerticalPadding = value;
+    ((NSButtonWithImageSpacing*)handle()).verticalPadding = value;
+    ((NSButton*)handle()).needsDisplay = YES;
 }

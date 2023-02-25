@@ -64,6 +64,9 @@ namespace Nui
 
         //! @brief The module manager.
         ModuleManager moduleManager;
+        
+        //! @brief Returns the path for the resource directory.
+        virtual fs::path resourcePath() const;
 
     NUI_EVENT: 
 

@@ -14,6 +14,7 @@
 
 #include "NTextControl.h"
 #include "NButtonType.h"
+#include "NImage.h"
 
 namespace Nui 
 {
@@ -31,6 +32,15 @@ namespace Nui
         
         //! @brief The alternate text.
         std::string mAlternateText;
+        
+        //! @brief The button's image.
+        Shared < Image > mImage;
+        
+        //! @brief The horizontal padding.
+        double mHorizontalPadding;
+        
+        //! @brief The vertical padding.
+        double mVerticalPadding;
 
     public:
         //! @brief Creates a new Button.
@@ -56,6 +66,24 @@ namespace Nui
         
         //! @brief Returns the alternate text.
         inline const std::string& alternateText() const { return mAlternateText; }
+        
+        //! @brief Sets the button's image.
+        virtual void setImage(const Shared < Image >& image);
+        
+        //! @brief Returns the button's image.
+        inline Shared < Image > image() const { return mImage; }
+        
+        //! @brief Sets the horizontal padding.
+        virtual void setHorizontalPadding(double value);
+        
+        //! @brief Returns the horizontal padding.
+        inline double horizontalPadding() const { return mHorizontalPadding; }
+        
+        //! @brief Sets the vertical padding.
+        virtual void setVerticalPadding(double value);
+        
+        //! @brief Returns the vertical padding.
+        inline double verticalPadding() const { return mVerticalPadding; }
     };
 }
 
