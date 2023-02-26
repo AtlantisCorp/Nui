@@ -89,6 +89,9 @@ namespace Nui
         {
             mActionPfn = handler;
         }
+        
+        //! @brief Updates the current text control style.
+        virtual void updateStyle(const ViewStyle& style);
 
     NUI_EVENT:
 

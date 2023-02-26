@@ -15,6 +15,9 @@
 #include "NPlatform.h"
 #include "NRect.h"
 #include "NColor.h"
+#include "NMouseButton.h"
+#include "NViewState.h"
+#include "NViewStyle.h"
 
 namespace Nui 
 {
@@ -38,6 +41,12 @@ namespace Nui
 
         //! @brief The NSView handle.
         NUI_OBJC_HDL(NSView) mHandle;
+        
+        //! @brief The NSResponder handle.
+        NUI_OBJC_HDL(NSResponder) mHandleResponder;
+        
+        //! @brief The NSTrackingArea area to track mouse moved events.
+        NUI_OBJC_HDL(NSTrackingArea) mTrackingArea;
 
 #       endif 
 
@@ -72,6 +81,14 @@ namespace Nui
 
         //! @brief The corner radius.
         double mCornerRadius;
+        
+    protected:
+
+        //! @brief The view's styles by state.
+        std::map < ViewState, ViewStyle > mStyles;
+
+        //! @brief The current view's state.
+        ViewState mState;
 
     protected:
 
@@ -263,6 +280,31 @@ namespace Nui
         //! @brief Removes a child from this view.
         virtual void removeChild(const Shared < View >& view);
 
+        //! @brief Updates the view's style.
+        virtual void updateStyle(const ViewStyle& style);
+
+        //! @brief Sets the style for the given state.
+        virtual inline void setStyle(ViewState state, const ViewStyle& style)
+        {
+            mStyles[state] = style;
+
+            if (mState == state) {
+                updateStyle(style);
+            }
+        }
+
+        //! @brief Returns the style for given state.
+        virtual inline const ViewStyle& style(ViewState state = ViewState::Neutral) const 
+        {
+            if (mStyles.contains(state)) {
+                return mStyles.at(state);
+            }
+            return mStyles.at(ViewState::Neutral);
+        }
+        
+        //! @brief Returns true if a point is in the view's rect.
+        virtual bool windowPointIsInFrame(const Point& location) const;
+
     NUI_EVENT:
         
         //! @brief The view is attached to a parent view.
@@ -270,6 +312,62 @@ namespace Nui
         
         //! @brief The view is detached from a parent view.
         virtual void detached(void) {}
+
+        //! @brief The mouse has been pressed in the view.
+        virtual void onMouseDown(MouseButton button, const Point& location)
+        {
+            auto p = parentView();
+            
+            if (p) {
+                p->onMouseDown(button, location);
+            }
+            
+            if (mState == ViewState::Hovered) {
+                mState = ViewState::Clicked;
+                updateStyle(style(mState));
+            }
+        }
+        
+        //! @brief The mouse has been released in the view.
+        virtual void onMouseUp(MouseButton button, const Point& location)
+        {
+            auto p = parentView();
+            
+            if (p) {
+                p->onMouseUp(button, location);
+            }
+            
+            if (mState == ViewState::Clicked) {
+                if (windowPointIsInFrame(location)) {
+                    mState = ViewState::Hovered;
+                }
+                else {
+                    mState = ViewState::Neutral;
+                }
+                updateStyle(style(mState));
+            }
+        }
+        
+        //! @brief The mouse has moved in the view.
+        virtual void onMouseMoved(double deltaX, double deltaY) { }
+        
+        //! @brief The mouse has entered the view.
+        virtual inline void onMouseEnter(const Point& location)
+        {
+            if (mState != ViewState::Clicked) {
+                mState = ViewState::Hovered;
+                updateStyle(style(mState));
+            }
+        }
+        
+        //! @brief The mouse has exited the view.
+        virtual inline void onMouseExit(const Point& location)
+        {
+            if (mState == ViewState::Hovered) {
+                mState = ViewState::Neutral;
+                updateStyle(style(mState));
+            }
+        }
     };
 }
 

@@ -28,4 +28,15 @@
     self.bounds = originalBounds;
 }
 
+- (void)mouseDown:(NSEvent *)event
+{
+    if (self.nextResponder) {
+        [self.nextResponder mouseDown:event];
+    }
+    [super mouseDown:event];
+    if (self.nextResponder) {
+        [self.nextResponder mouseUp:event];
+    }
+}
+
 @end

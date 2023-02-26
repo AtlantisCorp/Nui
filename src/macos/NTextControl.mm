@@ -59,6 +59,7 @@ void Nui::TextControl::setFont(const Shared<Font> &font)
 {
     ((NSControl*)handle()).font = font->handle();
     mFont = font;
+    mStyles[ViewState::Neutral].font = font;
 }
 
 void Nui::TextControl::setTextColor(const Color &color)
@@ -71,6 +72,7 @@ void Nui::TextControl::setTextColor(const Color &color)
                                                   alpha:color.alpha]];
     }
     mTextColor = color;
+    mStyles[ViewState::Neutral].textColor = color;
 }
 
 Nui::Size Nui::TextControl::preferredSize() const
@@ -85,6 +87,7 @@ Nui::Size Nui::TextControl::preferredSize() const
 void Nui::TextControl::setTextAlign(TextAlign value)
 {
     mTextAlign = value;
+    mStyles[ViewState::Neutral].textAlign = value;
     switch (value) {
         case TextAlign::Left:
             ((NSControl*)handle()).alignment = NSTextAlignmentLeft;
@@ -101,5 +104,38 @@ void Nui::TextControl::setTextAlign(TextAlign value)
         case TextAlign::Natural:
             ((NSControl*)handle()).alignment = NSTextAlignmentNatural;
             break;
+    }
+}
+
+void Nui::TextControl::updateStyle(const ViewStyle& style)
+{
+    View::updateStyle(style);
+    if (style.textAlign.has_value()) {
+        switch (style.textAlign.value()) {
+            case TextAlign::Left:
+                ((NSControl*)handle()).alignment = NSTextAlignmentLeft;
+                break;
+            case TextAlign::Center:
+                ((NSControl*)handle()).alignment = NSTextAlignmentCenter;
+                break;
+            case TextAlign::Right:
+                ((NSControl*)handle()).alignment = NSTextAlignmentRight;
+                break;
+            case TextAlign::Justified:
+                ((NSControl*)handle()).alignment = NSTextAlignmentJustified;
+                break;
+            case TextAlign::Natural:
+                ((NSControl*)handle()).alignment = NSTextAlignmentNatural;
+                break;
+        }
+    }
+    if (style.textColor.has_value()) {
+        if ([handle() respondsToSelector:@selector(setTextColor:)]) {
+            [handle() performSelector:@selector(setTextColor:)
+                           withObject:[NSColor colorWithRed:style.textColor.value().red
+                                                      green:style.textColor.value().green
+                                                       blue:style.textColor.value().blue
+                                                      alpha:style.textColor.value().alpha]];
+        }
     }
 }
