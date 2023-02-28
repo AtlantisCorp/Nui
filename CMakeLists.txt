@@ -53,3 +53,30 @@ if (APPLE AND NOT IOS)
     )
 
 endif () 
+
+if (WIN32) 
+
+    set(CMAKE_MFC_FLAG 1)
+
+    target_compile_definitions(
+        Nui 
+        PRIVATE 
+            -D_AFXDLL
+    ) 
+
+    file(
+        GLOB NuiWINHeaders 
+        ${CMAKE_CURRENT_SOURCE_DIR}/inc/Nui/win/*.h 
+    )
+    file(
+        GLOB NuiWINSources 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/win/*.cpp
+    )
+    target_sources(
+        Nui
+        PRIVATE
+            ${NuiWINHeaders}
+            ${NuiWINSources}
+    )
+
+endif ()
