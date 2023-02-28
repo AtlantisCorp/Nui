@@ -24,7 +24,7 @@ namespace Nui
      * initialize() to create a new Window. 
      * 
      */
-    class Application 
+    class Application
     {
 #       if NUI_PLATFORM_APPLE 
 
@@ -33,6 +33,13 @@ namespace Nui
 
         //! @brief The NSApplication delegate.
         NUI_OBJC_INT(NSApplicationDelegate) mDelegateHandle;
+
+#       endif 
+
+#       if NUI_PLATFORM_WIN32 
+
+        //! @brief Boolean true if the application should terminate on next loop.
+        BOOL mShouldTerminate;
 
 #       endif 
 

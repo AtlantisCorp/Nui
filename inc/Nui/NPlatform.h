@@ -52,6 +52,13 @@
 #   define NUI_EVENT protected
 #endif
 
+#if defined(_WIN32)
+#   define NUI_PLATFORM_WIN32 1
+#   include <Windows.h>
+#   include <afxwin.h>
+#   include <afxext.h>
+#endif 
+
 namespace std 
 {
     typedef std::map < std::string, std::any > dictionnary;
