@@ -37,6 +37,9 @@ namespace Nui
 
     public: 
 
+        //! @brief Creates a default TabBarItem.
+        TabBarItem(std::string_view title, std::string_view icon = "");
+
         //! @brief Returns the TabBar for this item.
         inline TabBar* bar() { return mTabBar; }
 

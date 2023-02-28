@@ -90,6 +90,10 @@ namespace Nui
         //! @brief The current view's state.
         ViewState mState;
 
+        //! @brief The view's default state. This is the state returned by defaultState(). You 
+        //! can set this state to the desired value for when the view isn't hovered nor clicked.
+        ViewState mDefaultState;
+
     protected:
 
 #       if NUI_PLATFORM_APPLE
@@ -305,6 +309,19 @@ namespace Nui
         //! @brief Returns true if a point is in the view's rect.
         virtual bool windowPointIsInFrame(const Point& location) const;
 
+        //! @brief Returns the default state.
+        virtual ViewState defaultState() const { return mDefaultState; }
+
+        //! @brief Sets the default state.
+        virtual void setDefaultState(ViewState state) 
+        {
+            if (mState == mDefaultState && state != mDefaultState) {
+                mState = state;
+                updateStyle(style(state));
+            }
+            mDefaultState = state;
+        }
+
     NUI_EVENT:
         
         //! @brief The view is attached to a parent view.
@@ -364,7 +381,7 @@ namespace Nui
         virtual inline void onMouseExit(const Point& location)
         {
             if (mState == ViewState::Hovered) {
-                mState = ViewState::Neutral;
+                mState = defaultState();
                 updateStyle(style(mState));
             }
         }
