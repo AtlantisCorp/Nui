@@ -38,6 +38,13 @@ namespace Nui
         NUI_OBJC_INT(NSWindowDelegate) mDelegateHandle;
 
 #       endif
+
+#       if NUI_PLATFORM_WIN32
+
+        //! @brief The Window handle.
+        HWND mHandle; 
+
+#       endif 
         
         //! @brief The content view.
         Shared < View > mContentView;
